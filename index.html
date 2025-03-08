@@ -80,23 +80,21 @@
 <body>
 
     <h1>Feliz Dia da Mulher!🩷</h1>
-    <p id="loadingText" class="hidden">Preparando a surpresa...</p>
     <p>Se acertar o botão, ganha uma surpresa!</p>
 
     <button id="trickButton">Clique Aqui</button>
 
     <div id="surprise" class="hidden">
-        <img src="./images.jpeg" alt="Imagem Romântica">
+        <img src="images.jpeg" alt="Imagem Romântica">
         <p class="msg">Parabéns! Você ganhou um vale-beijo sem data de validade!💕</p>
         <p class="hearts">❤❤❤</p>
-        <audio id="loveSong" src="./luanmp3_6DTydf54.mp3" preload="auto" controls></audio>
+        <audio id="loveSong" src="luanmp3_6DTydf54.mp3" preload="auto"></audio>
     </div>
 
     <script>
         let button = document.getElementById("trickButton");
         let audio = document.getElementById("loveSong");
         let surprise = document.getElementById("surprise");
-        let loadingText = document.getElementById("loadingText");
         let attempts = 0;
         let maxAttempts = 10;
 
@@ -140,14 +138,10 @@
 
         button.addEventListener("click", function() {
             button.style.display = "none";
-            loadingText.classList.remove("hidden");
-            setTimeout(() => {
-                loadingText.classList.add("hidden");
-                surprise.classList.remove("hidden");
-                setTimeout(() => surprise.classList.add("show"), 10);
-                audio.play();
-                createConfetti();
-            }, 1500);
+            surprise.classList.remove("hidden");
+            setTimeout(() => surprise.classList.add("show"), 10);
+            audio.play();
+            createConfetti();
         });
 
         window.addEventListener("resize", centerButton);
