@@ -63,72 +63,91 @@
             border-radius: 10px;
             margin-top: 20px;
         }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            opacity: 0.7;
+            animation: fall 3s linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
     </style>
 </head>
 <body>
 
     <h1>Feliz Dia da Mulher!🩷</h1>
-    <p>Se você acertar o botão, ganha um presente surpresa!</p>
+    <p id="loadingText" class="hidden">Preparando a surpresa...</p>
+    <p>Se acertar o botão, ganha uma surpresa!</p>
 
     <button id="trickButton">Clique Aqui</button>
 
     <div id="surprise" class="hidden">
-        <img src="./images.jpeg" alt="Imagem Romântica">
+        <img src="images.jpeg" alt="Imagem Romântica">
         <p class="msg">Parabéns! Você ganhou um vale-beijo sem data de validade!💕</p>
         <p class="hearts">❤❤❤</p>
-        <audio id="loveSong" src="luanmp3_6DTydf54.mp3" preload="auto"></audio>
+        <audio id="loveSong" src="luanmp3_6DTydf54.mp3" preload="auto" controls></audio>
     </div>
 
     <script>
         let button = document.getElementById("trickButton");
         let audio = document.getElementById("loveSong");
         let surprise = document.getElementById("surprise");
+        let loadingText = document.getElementById("loadingText");
         let attempts = 0;
-        let maxAttempts = 10; 
+        let maxAttempts = 10;
 
         function centerButton() {
             let screenWidth = window.innerWidth;
             let screenHeight = window.innerHeight;
             let buttonWidth = button.offsetWidth;
             let buttonHeight = button.offsetHeight;
-
             let centerX = (screenWidth - buttonWidth) / 2;
             let centerY = (screenHeight - buttonHeight) / 2;
-
             button.style.left = centerX + "px";
             button.style.top = centerY + "px";
         }
 
         function moveButton() {
             if (attempts >= maxAttempts) return;
-
+            if (navigator.vibrate) navigator.vibrate(100);
             let screenWidth = window.innerWidth;
             let screenHeight = window.innerHeight;
-            let buttonWidth = button.offsetWidth;
-            let buttonHeight = button.offsetHeight;
-
-            let newX = Math.random() * (screenWidth - buttonWidth - 50);
-            let newY = Math.random() * (screenHeight - buttonHeight - 50);
-
-            newX = Math.max(10, Math.min(newX, screenWidth - buttonWidth - 10));
-            newY = Math.max(10, Math.min(newY, screenHeight - buttonHeight - 10));
-
+            let newX = Math.random() * (screenWidth - 50);
+            let newY = Math.random() * (screenHeight - 50);
             button.style.left = newX + "px";
             button.style.top = newY + "px";
-
             attempts++;
         }
 
-        centerButton();
+        function createConfetti() {
+            for (let i = 0; i < 30; i++) {
+                let confetti = document.createElement("div");
+                confetti.classList.add("confetti");
+                confetti.style.left = Math.random() * window.innerWidth + "px";
+                confetti.style.backgroundColor = ["red", "pink", "purple"][Math.floor(Math.random() * 3)];
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3000);
+            }
+        }
 
+        centerButton();
         button.addEventListener("mouseover", moveButton);
         button.addEventListener("touchstart", moveButton);
 
         button.addEventListener("click", function() {
-            surprise.classList.remove("hidden");
-            setTimeout(() => surprise.classList.add("show"), 10);
             button.style.display = "none";
-            audio.play();
+            loadingText.classList.remove("hidden");
+            setTimeout(() => {
+                loadingText.classList.add("hidden");
+                surprise.classList.remove("hidden");
+                setTimeout(() => surprise.classList.add("show"), 10);
+                audio.play();
+                createConfetti();
+            }, 1500);
         });
 
         window.addEventListener("resize", centerButton);
