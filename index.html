@@ -16,11 +16,12 @@
             margin: 0;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
         }
         h1 {
             color: #d63384;
+            margin-top: 20px;
         }
         .hidden {
             display: none;
@@ -80,6 +81,9 @@
             font-size: 12px;
             color: #888;
         }
+        #instruction {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -93,8 +97,6 @@
         <p class="msg">Parabéns! Você ganhou um vale-beijo sem data de validade!</p>
         <audio id="loveSong" src="./luanmp3_6DTydf54.mp3"></audio>
     </div>
-
-    <p class="small-text">@mathkrch</p>
 
     <script>
         let button = document.getElementById("trickButton");
@@ -117,7 +119,7 @@
             let newY = Math.random() * (screenHeight - buttonHeight - 50);
             
             button.style.left = `${Math.max(10, newX)}px`;
-            button.style.top = `${Math.max(10, newY)}px`;
+            button.style.top = `${Math.max(50, newY)}px`;
             
             attempts++;
         }
@@ -163,3 +165,4 @@
     </script>
 </body>
 </html>
+
