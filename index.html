@@ -97,9 +97,9 @@
         let surprise = document.getElementById("surprise");
         let attempts = 0;
 
-        // Definindo o número de tentativas com base no tamanho da tela
-        let maxAttempts = window.innerWidth < 768 ? 50 : 20; // 50 tentativas para celular, 20 para PC
-        let moveInterval = 500;  // Aumentei o intervalo de movimento do botão para 500ms
+        // Mantendo 30 tentativas para ambos (PC e celular)
+        let maxAttempts = 30;
+        let moveInterval = 300;  // Aumentei a velocidade, movendo o botão a cada 300ms
 
         function centerButton() {
             let screenWidth = window.innerWidth;
@@ -145,7 +145,7 @@
         }
 
         centerButton();
-        setInterval(moveButton, moveInterval);  // Agora o botão se move a cada 500ms
+        setInterval(moveButton, moveInterval);  // O botão agora se move a cada 300ms
 
         button.addEventListener("click", function() {
             if (attempts >= maxAttempts) {
@@ -157,11 +157,7 @@
             }
         });
 
-        window.addEventListener("resize", function() {
-            centerButton();
-            // Atualiza o número de tentativas quando a janela é redimensionada
-            maxAttempts = window.innerWidth < 768 ? 50 : 20;
-        });
+        window.addEventListener("resize", centerButton);
     </script>
 
 </body>
