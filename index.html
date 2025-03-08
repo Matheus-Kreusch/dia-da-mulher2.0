@@ -46,45 +46,13 @@
             animation: float 1.5s infinite alternate;
         }
         @keyframes float {
-            0% { transform: translateY(0); opacity: 0.8; }
-            100% { transform: translateY(-10px); opacity: 1; }
-        }
-        #surprise {
-            opacity: 0;
-            transform: scale(0.8);
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-        }
-        #surprise.show {
-            opacity: 1;
-            transform: scale(1);
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
         }
         #surprise img {
             width: 250px;
             border-radius: 10px;
             margin-top: 20px;
-        }
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background-color: red;
-            opacity: 0.7;
-            animation: fall 3s linear infinite;
-        }
-        @keyframes fall {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(100vh); }
-        }
-
-        /* Responsividade para telas menores */
-        @media (max-width: 600px) {
-            body {
-                padding: 20px;
-            }
-            button {
-                font-size: 16px;
-                padding: 8px 16px;
-            }
         }
     </style>
 </head>
@@ -93,82 +61,60 @@
     <h1>Feliz Dia da Mulher!🩷</h1>
     <p>Se acertar o botão, ganha uma surpresa!</p>
 
-    <button id="trickButton" aria-label="Clique para ganhar uma surpresa">Clique Aqui</button>
+    <button id="trickButton">Clique Aqui</button>
 
     <div id="surprise" class="hidden">
-        <img src="images.jpeg" alt="Imagem Romântica">
+        <img src="./images.jpeg" alt="Imagem Romântica">
         <p class="msg">Parabéns! Você ganhou um vale-beijo sem data de validade!</p>
         <p class="hearts">🌹🩷</p>
-        <audio id="loveSong" src="luanmp3_6DTydf54.mp3" preload="auto"></audio>
+        <audio id="loveSong" src="./luanmp3_6DTydf54.mp3"></audio>
     </div>
 
     <script>
         let button = document.getElementById("trickButton");
         let audio = document.getElementById("loveSong");
-        let surprise = document.getElementById("surprise");
         let attempts = 0;
-        let isMoving = false;
-
-        // Mantendo 30 tentativas para ambos (PC e celular)
-        let maxAttempts = 25;
-        let moveInterval = 300;  // Aumentei a velocidade, movendo o botão a cada 300ms
+        let maxAttempts = 25; // Aumentamos para 10 tentativas
 
         function centerButton() {
             let screenWidth = window.innerWidth;
             let screenHeight = window.innerHeight;
             let buttonWidth = button.offsetWidth;
             let buttonHeight = button.offsetHeight;
-            let margin = 50;  // A margem que o botão vai respeitar das bordas da tela
+
             let centerX = (screenWidth - buttonWidth) / 2;
             let centerY = (screenHeight - buttonHeight) / 2;
+
             button.style.left = centerX + "px";
             button.style.top = centerY + "px";
         }
 
         function moveButton() {
-            if (!isMoving || attempts >= maxAttempts) return;
-            if (navigator.vibrate) navigator.vibrate(100);
+            if (attempts >= maxAttempts) return; // Depois de 10 tentativas, o botão para de fugir
+
             let screenWidth = window.innerWidth;
             let screenHeight = window.innerHeight;
             let buttonWidth = button.offsetWidth;
             let buttonHeight = button.offsetHeight;
-            
-            // Garantindo que o botão não ultrapasse as bordas da tela
-            let maxX = screenWidth - buttonWidth - 50;  // 50px de margem da borda
-            let maxY = screenHeight - buttonHeight - 50;  // 50px de margem da borda
 
-            let newX = Math.random() * maxX;
-            let newY = Math.random() * maxY;
+            let newX = Math.max(10, Math.random() * (screenWidth - buttonWidth - 200)); // Fuga mais longe
+            let newY = Math.max(10, Math.random() * (screenHeight - buttonHeight - 200)); // Fuga mais longe
 
             button.style.left = newX + "px";
             button.style.top = newY + "px";
-            attempts++;
-        }
 
-        function createConfetti() {
-            for (let i = 0; i < 30; i++) {
-                let confetti = document.createElement("div");
-                confetti.classList.add("confetti");
-                confetti.style.left = Math.random() * window.innerWidth + "px";
-                confetti.style.backgroundColor = ["red", "pink", "purple"][Math.floor(Math.random() * 3)];
-                document.body.appendChild(confetti);
-                setTimeout(() => confetti.remove(), 3000);
-            }
+            attempts++; // Contabiliza as tentativas
         }
 
         centerButton();
-        // O botão não vai se mover até ser clicado
+
+        button.addEventListener("mouseover", moveButton);
+        button.addEventListener("touchstart", moveButton);
+
         button.addEventListener("click", function() {
-            if (attempts >= maxAttempts) {
-                button.style.display = "none";
-                surprise.classList.remove("hidden");
-                setTimeout(() => surprise.classList.add("show"), 10);
-                audio.play();
-                createConfetti();
-            } else {
-                isMoving = true;  // Inicia o movimento do botão após o clique
-                setInterval(moveButton, moveInterval);  // O botão agora se move a cada 300ms após o clique
-            }
+            document.getElementById("surprise").classList.remove("hidden");
+            button.style.display = "none";
+            audio.play();
         });
 
         window.addEventListener("resize", centerButton);
