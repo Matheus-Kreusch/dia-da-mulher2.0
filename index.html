@@ -87,7 +87,7 @@
     <div id="surprise" class="hidden">
         <img src="images.jpeg" alt="Imagem Romântica">
         <p class="msg">Parabéns! Você ganhou um vale-beijo sem data de validade!💕</p>
-        <p class="hearts">🌹🩷</p>
+        <p class="hearts">❤❤❤</p>
         <audio id="loveSong" src="luanmp3_6DTydf54.mp3" preload="auto"></audio>
     </div>
 
@@ -96,7 +96,8 @@
         let audio = document.getElementById("loveSong");
         let surprise = document.getElementById("surprise");
         let attempts = 0;
-        let maxAttempts = 30;  // Aumentei o número de tentativas para 30
+        let maxAttempts = 50;  // Aumentei o número de tentativas para 50
+        let moveInterval = 500;  // Aumentei o intervalo de movimento do botão para 500ms
 
         function centerButton() {
             let screenWidth = window.innerWidth;
@@ -133,16 +134,16 @@
         }
 
         centerButton();
-        button.addEventListener("mouseenter", moveButton); // Para desktop
-        button.addEventListener("touchstart", moveButton); // Para celular
-        button.addEventListener("click", moveButton); // Adicionando para celulares
+        setInterval(moveButton, moveInterval);  // Agora o botão se move a cada 500ms
 
         button.addEventListener("click", function() {
-            button.style.display = "none";
-            surprise.classList.remove("hidden");
-            setTimeout(() => surprise.classList.add("show"), 10);
-            audio.play();
-            createConfetti();
+            if (attempts >= maxAttempts) {
+                button.style.display = "none";
+                surprise.classList.remove("hidden");
+                setTimeout(() => surprise.classList.add("show"), 10);
+                audio.play();
+                createConfetti();
+            }
         });
 
         window.addEventListener("resize", centerButton);
