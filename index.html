@@ -139,9 +139,17 @@
 
         setInterval(createHeart, 250);
 
+        function preventClick(event) {
+            if (attempts < maxAttempts) {
+                event.preventDefault();
+                moveButton();
+            }
+        }
+
         button.addEventListener("mouseover", moveButton);
-        button.addEventListener("touchstart", moveButton, { passive: true });
+        button.addEventListener("touchstart", preventClick, { passive: false });
         button.addEventListener("click", function() {
+            if (attempts < maxAttempts) return;
             surprise.classList.remove("hidden");
             button.style.display = "none";
             message.style.opacity = "1";
@@ -155,4 +163,3 @@
     </script>
 </body>
 </html>
-
