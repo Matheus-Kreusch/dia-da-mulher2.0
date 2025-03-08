@@ -25,6 +25,9 @@
             font-size: 22px;
             color: #444;
             margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
         }
         button {
             padding: 10px 20px;
@@ -35,90 +38,109 @@
             cursor: pointer;
             border-radius: 5px;
             position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
             transition: all 0.2s ease-in-out;
         }
         button:hover {
             background-color: #c2185b;
         }
         .hearts {
-            font-size: 40px;
+            font-size: 35px;
             color: red;
-            animation: float 1.5s infinite alternate;
+            position: absolute;
+            animation: floatUp 6s linear infinite;
+            opacity: 0;
         }
-        @keyframes float {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-10px); }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(0.8) rotate(0deg); }
+            25% { transform: translateY(-150px) scale(1) rotate(10deg); }
+            50% { transform: translateY(-300px) scale(1.2) rotate(-10deg); }
+            75% { transform: translateY(-450px) scale(1.3) rotate(10deg); }
+            100% { opacity: 0; transform: translateY(-600px) scale(1.5) rotate(-10deg); }
         }
         #surprise img {
             width: 250px;
             border-radius: 10px;
             margin-top: 20px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+        }
+        .hide-on-click {
+            transition: opacity 0.5s ease-in-out;
         }
     </style>
 </head>
 <body>
-
     <h1>Feliz Dia da Mulher!🩷</h1>
-    <p>Se acertar o botão, ganha uma surpresa!</p>
+    <p id="instruction" class="hide-on-click">Se acertar o botão, ganha uma surpresa!</p>
 
     <button id="trickButton">Clique Aqui</button>
 
     <div id="surprise" class="hidden">
         <img src="./images.jpeg" alt="Imagem Romântica">
         <p class="msg">Parabéns! Você ganhou um vale-beijo sem data de validade!</p>
-        <p class="hearts">🌹🩷</p>
         <audio id="loveSong" src="./luanmp3_6DTydf54.mp3"></audio>
     </div>
 
     <script>
         let button = document.getElementById("trickButton");
         let audio = document.getElementById("loveSong");
+        let surprise = document.getElementById("surprise");
+        let message = document.querySelector(".msg");
+        let image = document.querySelector("#surprise img");
+        let instruction = document.getElementById("instruction");
         let attempts = 0;
-        let maxAttempts = 25; // Aumentamos para 10 tentativas
-
-        function centerButton() {
-            let screenWidth = window.innerWidth;
-            let screenHeight = window.innerHeight;
-            let buttonWidth = button.offsetWidth;
-            let buttonHeight = button.offsetHeight;
-
-            let centerX = (screenWidth - buttonWidth) / 2;
-            let centerY = (screenHeight - buttonHeight) / 2;
-
-            button.style.left = centerX + "px";
-            button.style.top = centerY + "px";
-        }
+        let maxAttempts = 15;
 
         function moveButton() {
-            if (attempts >= maxAttempts) return; // Depois de 10 tentativas, o botão para de fugir
-
+            if (attempts >= maxAttempts) return;
             let screenWidth = window.innerWidth;
             let screenHeight = window.innerHeight;
             let buttonWidth = button.offsetWidth;
             let buttonHeight = button.offsetHeight;
-
-            let newX = Math.max(10, Math.random() * (screenWidth - buttonWidth - 200)); // Fuga mais longe
-            let newY = Math.max(10, Math.random() * (screenHeight - buttonHeight - 200)); // Fuga mais longe
-
-            button.style.left = newX + "px";
-            button.style.top = newY + "px";
-
-            attempts++; // Contabiliza as tentativas
+            
+            let newX = Math.random() * (screenWidth - buttonWidth - 50);
+            let newY = Math.random() * (screenHeight - buttonHeight - 50);
+            
+            button.style.left = `${newX}px`;
+            button.style.top = `${newY}px`;
+            
+            attempts++;
         }
 
-        centerButton();
+        function createHeart() {
+            let heart = document.createElement("div");
+            heart.classList.add("hearts");
+            heart.innerHTML = "❤️";
+            document.body.appendChild(heart);
+            
+            let startX = Math.random() * window.innerWidth;
+            let duration = Math.random() * 5 + 3;
+            heart.style.left = `${startX}px`;
+            heart.style.bottom = "0";
+            heart.style.animationDuration = `${duration}s`;
+            
+            setTimeout(() => heart.remove(), duration * 1000);
+        }
+
+        setInterval(createHeart, 250);
 
         button.addEventListener("mouseover", moveButton);
         button.addEventListener("touchstart", moveButton);
-
         button.addEventListener("click", function() {
-            document.getElementById("surprise").classList.remove("hidden");
+            surprise.classList.remove("hidden");
             button.style.display = "none";
+            message.style.opacity = "1";
+            message.style.transform = "translateY(0)";
+            image.style.opacity = "1";
+            image.style.transform = "scale(1)";
+            instruction.style.opacity = "0";
+            setTimeout(() => instruction.style.display = "none", 500);
             audio.play();
         });
-
-        window.addEventListener("resize", centerButton);
     </script>
-
 </body>
 </html>
