@@ -1,3 +1,7 @@
+Compartilhar
+
+M
+Você disse:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -13,7 +17,6 @@
             overflow: hidden;
             position: relative;
             height: 100vh;
-            width: 100vw;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -45,7 +48,7 @@
             border-radius: 5px;
             position: absolute;
             left: 50%;
-            top: 55%;
+            top: 55%; /* Ajustado para melhor posição */
             transform: translate(-50%, -50%);
             transition: all 0.2s ease-in-out;
         }
@@ -109,15 +112,16 @@
 
         function moveButton() {
             if (attempts >= maxAttempts) return;
+            let screenWidth = window.innerWidth;
+            let screenHeight = window.innerHeight;
+            let buttonWidth = button.offsetWidth;
+            let buttonHeight = button.offsetHeight;
             
-            let screenWidth = window.innerWidth - button.offsetWidth - 20;
-            let screenHeight = window.innerHeight - button.offsetHeight - 20;
+            let newX = Math.random() * (screenWidth - buttonWidth - 20);
+            let newY = Math.random() * (screenHeight - buttonHeight - 20);
             
-            let newX = Math.random() * screenWidth;
-            let newY = Math.random() * screenHeight;
-            
-            button.style.left = `${newX}px`;
-            button.style.top = `${newY}px`;
+            button.style.left = ${Math.max(10, newX)}px;
+            button.style.top = ${Math.max(60, newY)}px;
             
             attempts++;
         }
@@ -130,9 +134,9 @@
             
             let startX = Math.random() * window.innerWidth;
             let duration = Math.random() * 5 + 3;
-            heart.style.left = `${startX}px`;
+            heart.style.left = ${startX}px;
             heart.style.bottom = "0";
-            heart.style.animationDuration = `${duration}s`;
+            heart.style.animationDuration = ${duration}s;
             
             setTimeout(() => heart.remove(), duration * 1000);
         }
