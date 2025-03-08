@@ -96,7 +96,9 @@
         let audio = document.getElementById("loveSong");
         let surprise = document.getElementById("surprise");
         let attempts = 0;
-        let maxAttempts = 50;  // Aumentei o número de tentativas para 50
+
+        // Definindo o número de tentativas com base no tamanho da tela
+        let maxAttempts = window.innerWidth < 768 ? 50 : 20; // 50 tentativas para celular, 20 para PC
         let moveInterval = 500;  // Aumentei o intervalo de movimento do botão para 500ms
 
         function centerButton() {
@@ -104,6 +106,7 @@
             let screenHeight = window.innerHeight;
             let buttonWidth = button.offsetWidth;
             let buttonHeight = button.offsetHeight;
+            let margin = 50;  // A margem que o botão vai respeitar das bordas da tela
             let centerX = (screenWidth - buttonWidth) / 2;
             let centerY = (screenHeight - buttonHeight) / 2;
             button.style.left = centerX + "px";
@@ -115,8 +118,16 @@
             if (navigator.vibrate) navigator.vibrate(100);
             let screenWidth = window.innerWidth;
             let screenHeight = window.innerHeight;
-            let newX = Math.random() * (screenWidth - 50);
-            let newY = Math.random() * (screenHeight - 50);
+            let buttonWidth = button.offsetWidth;
+            let buttonHeight = button.offsetHeight;
+            
+            // Garantindo que o botão não ultrapasse as bordas da tela
+            let maxX = screenWidth - buttonWidth - 50;  // 50px de margem da borda
+            let maxY = screenHeight - buttonHeight - 50;  // 50px de margem da borda
+
+            let newX = Math.random() * maxX;
+            let newY = Math.random() * maxY;
+
             button.style.left = newX + "px";
             button.style.top = newY + "px";
             attempts++;
@@ -146,7 +157,11 @@
             }
         });
 
-        window.addEventListener("resize", centerButton);
+        window.addEventListener("resize", function() {
+            centerButton();
+            // Atualiza o número de tentativas quando a janela é redimensionada
+            maxAttempts = window.innerWidth < 768 ? 50 : 20;
+        });
     </script>
 
 </body>
