@@ -13,6 +13,7 @@
             overflow: hidden;
             position: relative;
             height: 100vh;
+            width: 100vw;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -21,7 +22,7 @@
         }
         h1 {
             color: #d63384;
-            margin-top: 20px;
+            margin-top: 5vh;
         }
         .hidden {
             display: none;
@@ -44,7 +45,7 @@
             border-radius: 5px;
             position: absolute;
             left: 50%;
-            top: 50%;
+            top: 55%;
             transform: translate(-50%, -50%);
             transition: all 0.2s ease-in-out;
         }
@@ -108,16 +109,17 @@
 
         function moveButton() {
             if (attempts >= maxAttempts) return;
+            
             let screenWidth = window.innerWidth;
-            let screenHeight = window.innerHeight;
+            let screenHeight = document.documentElement.clientHeight;
             let buttonWidth = button.offsetWidth;
             let buttonHeight = button.offsetHeight;
             
-            let newX = Math.random() * (screenWidth - buttonWidth - 50);
-            let newY = Math.random() * (screenHeight - buttonHeight - 50);
+            let newX = Math.random() * (screenWidth - buttonWidth - 40);
+            let newY = Math.random() * (screenHeight - buttonHeight - 40);
             
-            button.style.left = `${Math.max(10, newX)}px`;
-            button.style.top = `${Math.max(50, newY)}px`;
+            button.style.left = ${Math.max(20, Math.min(newX, screenWidth - buttonWidth - 20))}px;
+            button.style.top = ${Math.max(80, Math.min(newY, screenHeight - buttonHeight - 20))}px;
             
             attempts++;
         }
@@ -125,14 +127,14 @@
         function createHeart() {
             let heart = document.createElement("div");
             heart.classList.add("hearts");
-            heart.innerHTML = "❤️";
+            heart.innerHTML = "❤";
             document.body.appendChild(heart);
             
             let startX = Math.random() * window.innerWidth;
             let duration = Math.random() * 5 + 3;
-            heart.style.left = `${startX}px`;
+            heart.style.left = ${startX}px;
             heart.style.bottom = "0";
-            heart.style.animationDuration = `${duration}s`;
+            heart.style.animationDuration = ${duration}s;
             
             setTimeout(() => heart.remove(), duration * 1000);
         }
