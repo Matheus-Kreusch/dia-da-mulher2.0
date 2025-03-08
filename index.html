@@ -133,8 +133,9 @@
         }
 
         centerButton();
-        button.addEventListener("mouseover", moveButton);
-        button.addEventListener("touchstart", moveButton);
+        button.addEventListener("mouseenter", moveButton); // Para desktop
+        button.addEventListener("touchstart", moveButton); // Para celular
+        button.addEventListener("click", moveButton); // Adicionando para celulares
 
         button.addEventListener("click", function() {
             button.style.display = "none";
